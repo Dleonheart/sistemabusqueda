@@ -292,10 +292,11 @@
       crearHyperTree = function(json){
           var ht = new $jit.Hypertree({  
           injectInto: 'hyperArbol',  
+          radius:300,
           width: 940,  
           height: 480,
           Node: {  
-              dim: 10,  
+              dim: 15,  
               color: "#004080"  
           },  
           Edge: {  
