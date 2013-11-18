@@ -290,7 +290,7 @@
         return ht;
       },
       crearHyperTree = function(json){
-          var ht = new $jit.Icicle({  
+          var ht = new $jit.Hypertree({  
           injectInto: 'hyperArbol',  
           width: 940,  
           height: 480,
@@ -302,6 +302,27 @@
               lineWidth: 2,  
               color: "#0BC0F4"  
           },
+          Tips: {  
+            enable: true,  
+            type: 'html',  
+            // add positioning offsets  
+            offsetX: 20,  
+            offsetY: 20,  
+            // implement the onShow method to  
+            // add content to the tooltip when a node  
+            // is hovered  
+            onShow: function(tip, node){  
+              // count children  
+              var count = 0;  
+              node.eachSubnode(function(){  
+                count++;  
+              });  
+              // add tooltip info  
+              $(tip).html("<div class=\"tip-title\"><b>Name:</b> " + node.name  
+                  + "</div><div class=\"tip-text\">" + count + " children</div>").css('opacity',1);
+               
+            }  
+          },
           onCreateLabel: function(domElement, node){             
 
               domElement.innerHTML = node.name;  
@@ -309,7 +330,8 @@
                   //node.getParents && limpiarArbol(node.getParents()[0]);
                   ht.onClick(node.id, {  
                       onComplete: function() {  
-                          ht.controller.onComplete();  
+                          ht.controller.onComplete();
+                          ht.root= node.id;  
                       }  
                   });  
               });  
@@ -357,26 +379,10 @@
           },
           Events:{
             enable:true,
-            onMouseEnter: function(node) {  
-            //add border and replot node  
-            node.setData('border', '#33dddd');  
-            ht.fx.plotNode(node, ht.canvas);  
-            ht.labels.plotLabel(ht.canvas, node, ht.controller);  
-          },
-          onMouseLeave: function(node) {  
-            node.removeData('border');  
-            ht.fx.plot();  
-          },  
-            onClick:function(node){
-             if (node) {  
-              //hide tips and selections               
-              if(ht.events.hovered)  
-                this.onMouseLeave(ht.events.hovered);  
-                //perform the enter animation  
-              ht.enter(node);  
-              }  
+            onClick:function(){
+             //limpiarArbol(node.getParents());  
             }
-          }
+          }  
 
 
         });
